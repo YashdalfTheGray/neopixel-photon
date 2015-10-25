@@ -126,16 +126,16 @@ uint32_t Wheel(byte WheelPos) {
 }
 
 int allOnRemote(String command) {
-    if(command.equals("red")){
+    if(command.equals("red") || command.equals("Red")){
         colorAll(strip.Color(255,0,0), 50);
     }
-    else if(command.equals("green")){
+    else if(command.equals("green") || command.equals("Green")){
         colorAll(strip.Color(0,255,0), 50);
     }
-    else if(command.equals("blue")){
+    else if(command.equals("blue") || command.equals("Blue")){
         colorAll(strip.Color(0,0,255), 50);
     }
-    else if(command.equals("white")){
+    else if(command.equals("white") || command.equals("White")){
         colorAll(strip.Color(255,255,255), 50);
     }
     else {
