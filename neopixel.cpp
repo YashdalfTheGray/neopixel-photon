@@ -16,6 +16,8 @@ uint32_t Wheel(byte WheelPos);
 int allOnRemote(String command);
 int allOffRemote(String command);
 int colorSweepRemote(String command);
+int ledOn(String command);
+int ledOff(String command);
 
 /* ======================= extra-examples.cpp ======================== */
 
@@ -211,4 +213,12 @@ int colorSweepRemote(String command) {
         colorWipe(strip.Color(red,grn,blu), 50);
     }
     return 1;
+}
+
+int ledOn(String command) {
+    
+}
+
+int ledOff(String command) {
+    
 }
