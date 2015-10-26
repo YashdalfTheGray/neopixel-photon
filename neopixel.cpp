@@ -15,6 +15,7 @@ uint32_t Wheel(byte WheelPos);
 
 int allOnRemote(String command);
 int allOffRemote(String command);
+int colorSweepRemote(String command);
 
 /* ======================= extra-examples.cpp ======================== */
 
@@ -51,10 +52,34 @@ void setup() {
     
     Particle.function("allOn", allOnRemote);
     Particle.function("allOff", allOffRemote);
+    Particle.function("colorSweep", colorSweepRemote);
 }
 
 void loop() {
-    // Nothing needs to be done here.
+    // Some example procedures showing how to display to the pixels:
+    // Do not run more than one of these at a time, or the b/g tasks 
+    // will be blocked.
+    //--------------------------------------------------------------
+    
+    //strip.setPixelColor(0, strip.Color(255, 0, 255));
+    //strip.show();
+    
+    //colorWipe(strip.Color(255, 0, 0), 50); // Red
+    
+    //colorWipe(strip.Color(0, 255, 0), 50); // Green
+    
+    //colorWipe(strip.Color(0, 0, 255), 50); // Blue
+    
+    //colorWipe(strip.Color(255, 255, 255), 50); // White
+    
+    //rainbow(20);
+    //delay(5000);
+    //allOff();
+    //delay(5000);
+    
+    //rainbowCycle(20);
+    
+    //colorAll(strip.Color(0, 255, 255), 50); // Cyan
 }
 
 // Set all pixels in the strip to a solid color, then wait (ms)
@@ -156,5 +181,34 @@ int allOnRemote(String command) {
 
 int allOffRemote(String Command) {
     allOff();
+    return 1;
+}
+
+int colorSweepRemote(String command) {
+    if(command.equals("red") || command.equals("Red")){
+        colorWipe(strip.Color(255,0,0), 50);
+    }
+    else if(command.equals("green") || command.equals("Green")){
+        colorWipe(strip.Color(0,255,0), 50);
+    }
+    else if(command.equals("blue") || command.equals("Blue")){
+        colorWipe(strip.Color(0,0,255), 50);
+    }
+    else if(command.equals("white") || command.equals("White")){
+        colorWipe(strip.Color(255,255,255), 50);
+    }
+    else {
+        
+        char inputStr[20];
+        command.toCharArray(inputStr,20);
+        char *p = strtok(inputStr,",");
+        int red = atoi(p);
+        p = strtok(NULL,",");
+        int grn = atoi(p);
+        p = strtok(NULL,",");
+        int blu = atoi(p);
+        p = strtok(NULL,",");
+        colorWipe(strip.Color(red,grn,blu), 50);
+    }
     return 1;
 }
