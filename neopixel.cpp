@@ -16,8 +16,9 @@ uint32_t Wheel(byte WheelPos);
 int allOnRemote(String command);
 int allOffRemote(String command);
 int colorSweepRemote(String command);
-int ledOn(String command);
-int ledOff(String command);
+int ledOnRemote(String command);
+int ledOffRemote(String command);
+int sweepOffRemote(String command);
 
 /* ======================= extra-examples.cpp ======================== */
 
@@ -52,9 +53,12 @@ void setup() {
     strip.begin();
     strip.show(); // Initialize all pixels to 'off'
     
+    Particle.function("ledOn", ledOnRemote);
+    Particle.function("ledOff", ledOffRemote);
     Particle.function("allOn", allOnRemote);
     Particle.function("allOff", allOffRemote);
     Particle.function("colorSweep", colorSweepRemote);
+    Particle.function("sweepOff", sweepOffRemote);
 }
 
 void loop() {
@@ -154,16 +158,16 @@ uint32_t Wheel(byte WheelPos) {
 
 int allOnRemote(String command) {
     if(command.equals("red") || command.equals("Red")){
-        colorAll(strip.Color(255,0,0), 50);
+        colorAll(strip.Color(255, 0, 0), 50);
     }
     else if(command.equals("green") || command.equals("Green")){
-        colorAll(strip.Color(0,255,0), 50);
+        colorAll(strip.Color(0, 255, 0), 50);
     }
     else if(command.equals("blue") || command.equals("Blue")){
-        colorAll(strip.Color(0,0,255), 50);
+        colorAll(strip.Color(0, 0, 255), 50);
     }
     else if(command.equals("white") || command.equals("White")){
-        colorAll(strip.Color(255,255,255), 50);
+        colorAll(strip.Color(255, 255, 255), 50);
     }
     else {
         
@@ -188,16 +192,16 @@ int allOffRemote(String Command) {
 
 int colorSweepRemote(String command) {
     if(command.equals("red") || command.equals("Red")){
-        colorWipe(strip.Color(255,0,0), 50);
+        colorWipe(strip.Color(255, 0, 0), 50);
     }
     else if(command.equals("green") || command.equals("Green")){
-        colorWipe(strip.Color(0,255,0), 50);
+        colorWipe(strip.Color(0, 255, 0), 50);
     }
     else if(command.equals("blue") || command.equals("Blue")){
-        colorWipe(strip.Color(0,0,255), 50);
+        colorWipe(strip.Color(0, 0, 255), 50);
     }
     else if(command.equals("white") || command.equals("White")){
-        colorWipe(strip.Color(255,255,255), 50);
+        colorWipe(strip.Color(255, 255, 255), 50);
     }
     else {
         
@@ -215,10 +219,52 @@ int colorSweepRemote(String command) {
     return 1;
 }
 
-int ledOn(String command) {
+int ledOnRemote(String command) {
+    int i = 0;
     
+    char inputStr[20];
+    command.toCharArray(inputStr,20);
+    char *p = strtok(inputStr,",");
+    i = atoi(p);
+    p = strtok(NULL,",");
+    if (String(p).equals("red") || String(p).equals("Red")){
+        strip.setPixelColor(i, strip.Color(255, 0, 0));
+    }
+    else if (String(p).equals("green") || String(p).equals("Green")){
+        strip.setPixelColor(i, strip.Color(0, 255, 0));
+    }
+    else if (String(p).equals("blue") || String(p).equals("Blue")){
+        strip.setPixelColor(i, strip.Color(0, 0, 255));
+    }
+    else if (String(p).equals("white") || String(p).equals("White")){
+        strip.setPixelColor(i, strip.Color(255, 255, 255));
+    }
+    else {
+        //parse out CSV colors
+        
+        uint8_t red = atoi(p);
+        p = strtok(NULL,",");
+        uint8_t grn = atoi(p);
+        p = strtok(NULL,",");
+        uint8_t blu = atoi(p);
+        
+        strip.setPixelColor(i, strip.Color(red, grn, blu));
+    }
+    strip.show();
+    return 1;
 }
 
-int ledOff(String command) {
-    
+int ledOffRemote(String command) {
+    char inputStr[10];
+    command.toCharArray(inputStr,10);
+    char *p = strtok(inputStr,",");
+    int i = atoi(p);
+    strip.setPixelColor(i, strip.Color(0, 0, 0));
+    strip.show();
+    return 1;
+}
+
+int sweepOffRemote(String command) {
+    colorWipe(strip.Color(0, 0, 0), 50);
+    return 1;
 }
