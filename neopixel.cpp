@@ -19,6 +19,8 @@ int colorSweepRemote(String command);
 int ledOnRemote(String command);
 int ledOffRemote(String command);
 int sweepOffRemote(String command);
+int rainbowRemote(String command);
+int rainbowCycleRemote(String command);
 
 /* ======================= extra-examples.cpp ======================== */
 
@@ -59,6 +61,8 @@ void setup() {
     Particle.function("allOff", allOffRemote);
     Particle.function("colorSweep", colorSweepRemote);
     Particle.function("sweepOff", sweepOffRemote);
+    Particle.function("rainbow", rainbowRemote);
+    Particle.function("rainbowCycle", rainbowCycleRemote);
 }
 
 void loop() {
@@ -266,5 +270,33 @@ int ledOffRemote(String command) {
 
 int sweepOffRemote(String command) {
     colorWipe(strip.Color(0, 0, 0), 50);
+    return 1;
+}
+
+int rainbowRemote(String command) {
+    char inputStr[10];
+    command.toCharArray(inputStr,10);
+    int i = atoi(inputStr);
+    
+    long startMillis = millis();
+    while(millis() < startMillis + i*1000){
+        rainbow(20);
+    }
+    
+    allOff();
+    return 1;
+}
+
+int rainbowCycleRemote(String command) {
+    char inputStr[10];
+    command.toCharArray(inputStr,10);
+    int i = atoi(inputStr);
+    
+    long startMillis = millis();
+    while(millis() < startMillis + i*1000){
+        rainbowCycle(20);
+    }
+    
+    allOff();
     return 1;
 }
